@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import bcrypt from 'bcrypt'
+import bcryptjs from 'bcryptjs'
 
 const userSchema = new mongoose.Schema(
   {
@@ -40,7 +40,7 @@ userSchema.pre('save', function(next) {
     return next()
   }
 
-  bcrypt.hash(this.password, 8, (err, hash) => {
+  bcryptjs.hash(this.password, 8, (err, hash) => {
     if (err) {
       return next(err)
     }
@@ -53,7 +53,7 @@ userSchema.pre('save', function(next) {
 userSchema.methods.checkPassword = function(password) {
   const passwordHash = this.password
   return new Promise((resolve, reject) => {
-    bcrypt.compare(password, passwordHash, (err, same) => {
+    bcryptjs.compare(password, passwordHash, (err, same) => {
       if (err) {
         return reject(err)
       }
